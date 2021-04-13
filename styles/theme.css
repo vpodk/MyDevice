@@ -25,3 +25,7 @@ footer {
 #main > aside {
   background-color: Gainsboro;
 }
+
+.box {
+  border: solid 1px Gainsboro;
+}
