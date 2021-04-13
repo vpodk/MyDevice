@@ -1,0 +1,78 @@
+/**
+ * Main application styles.
+ *
+ * @see https://google.github.io/styleguide/htmlcssguide.html
+ * @see https://github.com/google/closure-stylesheets
+ */
+
+ body {
+  font-family: arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+#main {
+  margin: 5em auto 0;
+}
+
+header,
+footer {
+  height: 5em;
+  width: 100%;
+}
+
+header {
+  position: fixed;
+}
+
+header h1 {
+  float: left;
+}
+
+.box {
+  border-radius: 5px;
+  border: solid 1px grey;
+  padding: 1em;
+  margin: 1em 0;
+}
+
+.box h2,
+.box dl dt,
+.box dl dd {
+  padding: 0 0 .75em;
+}
+
+.box dl dt {
+  float: left;
+}
+
+.box dl dd {
+  text-align: right;
+}
+
+@media only screen and (min-width: 768px) {
+  header,
+  footer,
+  #main {
+    max-width: 1440px;
+  }
+
+  header,
+  footer {
+    margin: 0 auto;
+  }
+
+  header {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  article {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+  }
+  .box {
+    margin: 1em;
+    width: 30%;
+  }
+}
