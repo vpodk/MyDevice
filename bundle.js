@@ -40,8 +40,8 @@
     if (navigator.userAgentData) {
       const record = navigator.userAgentData.brands && 
                      navigator.userAgentData.brands[0];
-      browserName = record.brand;
-      majorVersion = record.version;
+      browserName = record && record.brand;
+      majorVersion = record && record.version;
     } else {
       let nAgt = navigator.userAgent;
       let nameOffset, verOffset, ix;
