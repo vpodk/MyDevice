@@ -6,7 +6,8 @@
  */
 
  body {
-  font-family: arial, sans-serif;
+  font-family: Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 100%;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -28,7 +29,8 @@ header h1 {
   float: left;
 }
 
-.box {
+.box,
+aside a {
   border-radius: 5px;
   padding: 1em;
   margin: 1em 0;
@@ -46,6 +48,21 @@ header h1 {
 
 .box dl dd {
   text-align: right;
+}
+
+aside a {
+  display: block;
+  text-decoration: none;
+}
+
+aside a [role="img"] {
+  background-position: center;
+  background-size: cover;
+  height: 200px;
+}
+
+aside a h3 {
+  margin: .5em 0;
 }
 
 @media only screen and (min-width: 768px) {
