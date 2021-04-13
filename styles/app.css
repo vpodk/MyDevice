@@ -23,8 +23,6 @@ footer {
 
 header {
   position: fixed;
-  background: url(../logo.svg) no-repeat 1em center;
-  background-size: 4.5em;
 }
 
 header h1 {
