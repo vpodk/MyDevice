@@ -39,6 +39,13 @@
                                'ProximitySensor' in win);
   };
 
+  const initInputFeatures = () => {
+    setResult('touch-gestures', 'ontouchstart' in win || 'onpointerdown' in win);
+    setResult('speech-api', 'webkitSpeechRecognition' in win || 'SpeechRecognition' in win);
+    setResult('clipboard-api', 'clipboard' in nav || 'ClipboardEvent' in win);
+    setResult('pointing-api', win.matchMedia('(pointer: none), (pointer: coarse), (pointer: fine)').matches);
+  };
+
   const initBrowserInfo = () => {
     let browserName  = nav.appName;
     let fullVersion  = '' + parseFloat(nav.appVersion);
@@ -123,4 +130,5 @@
   initMediaFeatures();
   initProgressiveExperience();
   initLocationFeatures();
+  initInputFeatures();
 })(document, window, navigator);
