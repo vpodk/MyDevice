@@ -4,7 +4,7 @@
     setResult('network-information', connection ? connection.effectiveType : false);
     setResult('device-memory', 'deviceMemory' in nav);
     setResult('online-status', ('onLine' in nav)|| ('ononline' in win));
-    setResult('vibration-api', 'vibrate️' in nav);
+    setResult('vibration-api', 'vibrate' in nav);
     setResult('battery-status', ('getBattery' in nav) || ('battery' in nav));
   };
 

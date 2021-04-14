@@ -82,6 +82,10 @@ aside a h3 {
   margin: .5em 0;
 }
 
+aside p {
+  line-height: 1.5;
+}
+
 @media only screen and (min-width: 768px) {
   header,
   footer,

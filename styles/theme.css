@@ -43,3 +43,8 @@ aside a {
 .box a {
   color: RoyalBlue;
 }
+
+.no {
+  color: Crimson;
+  font-weight: 600;
+}
