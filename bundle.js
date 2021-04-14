@@ -26,6 +26,19 @@
     setResult('credentials-api', 'PasswordCredential' in win || 'FederatedCredential' in win);
   };
 
+  const initLocationFeatures = () => {
+    setResult('geo-api', 'geolocation' in nav);
+    setResult('orientation-api', 'DeviceOrientationEvent' in win ||
+                                 'AbsoluteOrientationSensor' in win ||
+                                 'RelativeOrientationSensor' in win);
+    setResult('motion-api', 'DeviceMotionEvent' in win ||
+                            'Accelerometer' in win ||
+                            'Gyroscope' in win);
+    setResult('proximity-api', 'ondeviceproximity' in win || 
+                               'onuserproximity' in win ||
+                               'ProximitySensor' in win);
+  };
+
   const initBrowserInfo = () => {
     let browserName  = nav.appName;
     let fullVersion  = '' + parseFloat(nav.appVersion);
@@ -109,4 +122,5 @@
   initDeviceFeatures();
   initMediaFeatures();
   initProgressiveExperience();
+  initLocationFeatures();
 })(document, window, navigator);
