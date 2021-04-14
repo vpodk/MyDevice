@@ -27,7 +27,11 @@ header {
 
 header h1 {
   float: left;
-  padding: 0 3em;
+}
+
+header h1 svg {
+  vertical-align: middle;
+  margin-right: .5em;
 }
 
 .box,
@@ -88,6 +92,7 @@ aside a h3 {
     flex-flow: row wrap;
     justify-content: flex-start;
   }
+
   .box {
     margin: 1em;
     width: 30%;

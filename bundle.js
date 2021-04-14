@@ -1,49 +1,42 @@
-(function() {
-  const initNetworkInfo = () => {
-    const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+(function(doc, win, nav) {
+  const initDeviceFeatures = () => {
+    const connection = nav.connection || nav.mozConnection || nav.webkitConnection;
     setResult('network-information', connection ? connection.effectiveType : false);
-  };
-
-  const initOnlineStatus = () => {
-    const isSupported = ('onLine' in navigator )|| ('ononline' in window);
-    setResult('online-status', isSupported);
-  };
-
-  const initVibrationApi = () => {
-    const isSupported = ('onLine' in navigator )|| ('ononline' in window);
-    setResult('vibration-api', isSupported);
-  };
-
-  const initBatteryStatus = () => {
-    const isSupported = ('getBattery' in navigator) || ('battery' in navigator);
-    setResult('battery-status', isSupported);
-  };
-
-  const initDeviceMemory = () => {
-    const isSupported = 'deviceMemory' in navigator;
-    setResult('device-memory', isSupported);
+    setResult('device-memory', 'deviceMemory' in nav);
+    setResult('online-status', ('onLine' in nav)|| ('ononline' in win));
+    setResult('vibration-api', 'vibrate️' in nav);
+    setResult('battery-status', ('getBattery' in nav) || ('battery' in nav));
   };
 
   const initMediaFeatures = () => {
-    const isSupported = ('mediaDevices' in navigator) || ('getUserMedia' in navigator);
+    const isSupported = ('mediaDevices' in nav) || ('getUserMedia' in nav);
     setResult('media-capture', isSupported);
-    setResult('image-capture', isSupported && 'ImageCapture' in window);
-    setResult('media-recorder', isSupported && 'MediaRecorder' in window);
-    setResult('webrtc-support', isSupported && 'RTCPeerConnection' in window);
+    setResult('image-capture', isSupported && 'ImageCapture' in win);
+    setResult('media-recorder', isSupported && 'MediaRecorder' in win);
+    setResult('webrtc-support', isSupported && 'RTCPeerConnection' in win);
+  };
+
+  const initProgressiveExperience = () => {
+    const hasWorker = 'serviceWorker' in nav;
+    setResult('offline-mode', hasWorker && 'CacheStorage' in win);
+    setResult('pwa-installation', 'BeforeInstallPromptEvent' in win);
+    setResult('bg-sync', hasWorker && 'SyncManager' in win);
+    setResult('sharing-api', 'share' in nav);
+    setResult('payments-api', 'PaymentRequest' in win || 'ApplePaySession' in win);
+    setResult('credentials-api', 'PasswordCredential' in win || 'FederatedCredential' in win);
   };
 
   const initBrowserInfo = () => {
-    let browserName  = navigator.appName;
-    let fullVersion  = '' + parseFloat(navigator.appVersion);
-    let majorVersion = parseInt(navigator.appVersion, 10);
+    let browserName  = nav.appName;
+    let fullVersion  = '' + parseFloat(nav.appVersion);
+    let majorVersion = parseInt(nav.appVersion, 10);
 
-    if (navigator.userAgentData) {
-      const record = navigator.userAgentData.brands && 
-                     navigator.userAgentData.brands[0];
+    if (nav.userAgentData) {
+      const record = nav.userAgentData.brands && nav.userAgentData.brands[0];
       browserName = record && record.brand;
       majorVersion = record && record.version;
     } else {
-      let nAgt = navigator.userAgent;
+      let nAgt = nav.userAgent;
       let nameOffset, verOffset, ix;
       
       if ((verOffset = nAgt.indexOf("OPR/")) != -1) {
@@ -80,7 +73,7 @@
         browserName = nAgt.substring(nameOffset, verOffset);
         fullVersion = nAgt.substring(verOffset + 1);
         if (browserName.toLowerCase() == browserName.toUpperCase()) {
-          browserName = navigator.appName;
+          browserName = nav.appName;
         }
       }
 
@@ -93,32 +86,27 @@
       
       majorVersion = parseInt('' + fullVersion, 10);
       if (isNaN(majorVersion)) {
-        fullVersion  = '' + parseFloat(navigator.appVersion); 
-        majorVersion = parseInt(navigator.appVersion, 10);
+        fullVersion  = '' + parseFloat(nav.appVersion); 
+        majorVersion = parseInt(nav.appVersion, 10);
       }
     }
     
     setResult('browser-name', browserName);
     setResult('browser-version', majorVersion);
-    setResult('browser-platform', navigator.platform);
-    setResult('browser-cookie', navigator.cookieEnabled);
+    setResult('browser-platform', nav.platform);
+    setResult('browser-cookie', nav.cookieEnabled);
     setResult('browser-screen', screen.width + ' x ' + screen.height);
   };
 
   const setResult = (id, value) => {
-    const node = document.getElementById(id);
+    const node = doc.getElementById(id);
     const isBool = 'boolean' === typeof value;
     node.className = value ? 'yes' : 'no';
     node.textContent = isBool ? (value ? 'Yes' : 'No') : value;
   };
 
   initBrowserInfo();
-
-  initNetworkInfo();
-  initOnlineStatus();
-  initVibrationApi();
-  initBatteryStatus();
-  initDeviceMemory();
-
+  initDeviceFeatures();
   initMediaFeatures();
-})();
+  initProgressiveExperience();
+})(document, window, navigator);

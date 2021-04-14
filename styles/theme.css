@@ -23,10 +23,12 @@ footer {
   color: White;
 }
 
-header {
-  background: url(../logo.svg) no-repeat 1em center/4.5em,
-              url(https://images.unsplash.com/photo-1463130456064-77fda7f96d6b) center/cover;
-  color: DimGray;
+header path {
+  fill: Gray;
+}
+
+header polygon {
+  fill: MidnightBlue;
 }
 
 #main > aside {
@@ -36,4 +38,8 @@ header {
 .box,
 aside a {
   border: solid 1px Gainsboro;
+}
+
+.box a {
+  color: RoyalBlue;
 }
