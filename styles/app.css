@@ -29,6 +29,18 @@ header h1 {
   float: left;
 }
 
+header span {
+  position: relative;
+  top: -.25em;
+}
+
+header p {
+  clear: both;
+  padding-left: 4.1em;
+  position: relative;
+  top: -1em;
+}
+
 header h1 svg {
   vertical-align: middle;
   margin-right: .5em;
