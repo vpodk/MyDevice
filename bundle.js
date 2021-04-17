@@ -53,11 +53,17 @@
 
     if (nav.userAgentData && nav.userAgentData.brands && 
         nav.userAgentData.brands.length > 1) {
-      const record = nav.userAgentData.brands.filter((record) => {
-        return record.brand != ';Not A Brand';
-      })[0];
-      browserName = record && record.brand;
-      majorVersion = record && record.version;
+      
+      const brands = [];
+      nav.userAgentData.brands.forEach((record) => {
+        ';Not A Brand' != record.brand && brands.push(record.brand);
+      });
+      browserName = brands.join(':');
+      // const record = nav.userAgentData.brands.filter((record) => {
+      //   return record.brand != ';Not A Brand';
+      // })[0];
+      // browserName = record && record.brand;
+      // majorVersion = record && record.version;
     } else {
       let nAgt = nav.userAgent;
       let nameOffset, verOffset, ix;
