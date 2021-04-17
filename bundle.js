@@ -53,17 +53,17 @@
 
     if (nav.userAgentData && nav.userAgentData.brands && 
         nav.userAgentData.brands.length > 1) {
-      
+
       const brands = [];
+      const versions = [];
       nav.userAgentData.brands.forEach((record) => {
-        ';Not A Brand' != record.brand && brands.push(record.brand);
+        if ('NotABrand' != record.brand.replace(/\W+/g, '')) {
+          brands.push(record.brand);
+          versions.push(record.version);
+        }
       });
       browserName = brands.join(':');
-      // const record = nav.userAgentData.brands.filter((record) => {
-      //   return record.brand != ';Not A Brand';
-      // })[0];
-      // browserName = record && record.brand;
-      // majorVersion = record && record.version;
+      majorVersion = versions.join('/');
     } else {
       let nAgt = nav.userAgent;
       let nameOffset, verOffset, ix;
