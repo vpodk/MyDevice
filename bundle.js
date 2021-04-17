@@ -53,17 +53,16 @@
 
     if (nav.userAgentData && nav.userAgentData.brands && 
         nav.userAgentData.brands.length > 1) {
-
-      const brands = [];
-      const versions = [];
-      nav.userAgentData.brands.forEach((record) => {
-        if ('NotABrand' != record.brand.replace(/\W+/g, '')) {
-          brands.push(record.brand);
-          versions.push(record.version);
-        }
-      });
-      browserName = brands.join(':');
-      majorVersion = versions.join('/');
+      const brands = nav.userAgentData.brands;
+      const firstRecord = nav.userAgentData.brands[0];
+      if ('NotABrand' != firstRecord.brand.replace(/\W+/g, '')) {
+        browserName = firstRecord.brand;
+        majorVersion = firstRecord.version;
+      } else {
+        const lastRecord = nav.userAgentData.brands[brands.length - 1];
+        browserName = lastRecord.brand;
+        majorVersion = lastRecord.version;
+      }
     } else {
       let nAgt = nav.userAgent;
       let nameOffset, verOffset, ix;
