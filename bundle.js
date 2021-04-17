@@ -51,7 +51,8 @@
     let fullVersion  = '' + parseFloat(nav.appVersion);
     let majorVersion = parseInt(nav.appVersion, 10);
 
-    if (nav.userAgentData) {
+    if (nav.userAgentData && nav.userAgentData.brands && 
+        nav.userAgentData.brands.length > 1) {
       const record = nav.userAgentData.brands && nav.userAgentData.brands[0];
       browserName = record && record.brand;
       majorVersion = record && record.version;
