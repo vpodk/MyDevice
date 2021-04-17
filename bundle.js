@@ -47,80 +47,45 @@
   };
 
   const initBrowserInfo = () => {
+    const browsers = [
+      // "5.0 (Macintosh; Intel Mac OS X 11_2_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.114 Safari/537.36 OPR/75.0.3969.171"
+      {name: 'Opera', pattern: /\sOPR\/(\d+)/},
+      // "5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.74 Safari/537.36 Edg/79.0.309.43"
+      {name: 'Microsoft Edge', pattern: /\sEdg(e|A|iOS)?\/(\d+)/},
+      // "5.0 (Macintosh; Intel Mac OS X 11_2_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.114 Safari/537.36"
+      // "5.0 (Macintosh; Intel Mac OS X 11_2_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.128 Safari/537.36"
+      {name: 'Google Chrome', pattern: /\sChrome\/(\d+)/},
+      // "5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.3 Safari/605.1.15"
+      {name: 'Safari', pattern: /\sSafari\/(\d+)/, version: /\sVersion\/(\d+)/},
+      // 5.0 (Macintosh; Intel Mac OS X 11.2; rv:87.0) Gecko/20100101 Firefox/87.0
+      {name: 'Firefox', pattern: /\s(Firefox|FxiOS)\/(\d+)/},
+      // 5.0 (compatible; MSIE 10.0; Windows NT 6.2)
+      // 5.0 (Windows NT 10.0; Trident/7.0; rv:11.0) like Gecko
+      {name: 'Internet Explorer', pattern: /\s(MSIE|Trident)[\s/](\d+)/}
+    ];
+
     let browserName  = nav.appName;
-    let fullVersion  = '' + parseFloat(nav.appVersion);
-    let majorVersion = parseInt(nav.appVersion, 10);
+    let browserVersion = parseInt(nav.appVersion, 10);
+    const agent = nav.userAgent;
 
-    if (nav.userAgentData && nav.userAgentData.brands && 
-        nav.userAgentData.brands.length > 1) {
-      const brands = nav.userAgentData.brands;
-      const firstRecord = nav.userAgentData.brands[0];
-      if ('NotABrand' != firstRecord.brand.replace(/\W+/g, '')) {
-        browserName = firstRecord.brand;
-        majorVersion = firstRecord.version;
-      } else {
-        const lastRecord = nav.userAgentData.brands[brands.length - 1];
-        browserName = lastRecord.brand;
-        majorVersion = lastRecord.version;
-      }
-    } else {
-      let nAgt = nav.userAgent;
-      let nameOffset, verOffset, ix;
-      
-      if ((verOffset = nAgt.indexOf("OPR/")) != -1) {
-        // In Opera 15+, the true version is after "OPR/" 
-        browserName = "Opera";
-        fullVersion = nAgt.substring(verOffset + 4);
-      } else if ((verOffset = nAgt.indexOf("Opera")) != -1) {
-        // In older Opera, the true version is after "Opera" or after "Version"
-        browserName = "Opera";
-        fullVersion = nAgt.substring(verOffset + 6);
-        if ((verOffset = nAgt.indexOf("Version")) != -1) 
-          fullVersion = nAgt.substring(verOffset + 8);
-      } else if ((verOffset = nAgt.indexOf("MSIE")) != -1) {
-        // In MSIE, the true version is after "MSIE" in userAgent
-        browserName = "Internet Explorer";
-        fullVersion = nAgt.substring(verOffset + 5);
-      } else if ((verOffset = nAgt.indexOf("Chrome"))!=-1) {
-        // In Chrome, the true version is after "Chrome" 
-        browserName = "Chrome";
-        fullVersion = nAgt.substring(verOffset + 7);
-      } else if ((verOffset = nAgt.indexOf("Safari")) != -1) {
-        // In Safari, the true version is after "Safari" or after "Version" 
-        browserName = "Safari";
-        fullVersion = nAgt.substring(verOffset + 7);
-        if ((verOffset = nAgt.indexOf("Version")) != -1) 
-          fullVersion = nAgt.substring(verOffset + 8);
-      } else if ((verOffset = nAgt.indexOf("Firefox")) != -1) {
-        // In Firefox, the true version is after "Firefox" 
-        browserName = "Firefox";
-        fullVersion = nAgt.substring(verOffset + 8);
-      } else if ((nameOffset = nAgt.lastIndexOf(' ') + 1) < 
-                (verOffset = nAgt.lastIndexOf('/'))) {
-        // In most other browsers, "name/version" is at the end of userAgent 
-        browserName = nAgt.substring(nameOffset, verOffset);
-        fullVersion = nAgt.substring(verOffset + 1);
-        if (browserName.toLowerCase() == browserName.toUpperCase()) {
-          browserName = nav.appName;
+    for (let i = 0; i < browsers.length;) {
+      const browser = browsers[i++];
+      const pattern = browser.pattern;
+      let matches = agent.match(pattern);
+      if (matches) {
+        browserName = browser.name;
+        browserVersion = matches.pop();
+        if (browser.version) {
+          matches = agent.match(browser.version);
+          if (matches) browserVersion = matches.pop();
         }
+        console.log(pattern, matches);
+        break;
       }
+    } 
 
-      // trim the fullVersion string at semicolon/space if present
-      if ((ix = fullVersion.indexOf(";")) != -1)
-        fullVersion = fullVersion.substring(0, ix);
-
-      if ((ix = fullVersion.indexOf(" ")) != -1)
-        fullVersion = fullVersion.substring(0, ix);
-      
-      majorVersion = parseInt('' + fullVersion, 10);
-      if (isNaN(majorVersion)) {
-        fullVersion  = '' + parseFloat(nav.appVersion); 
-        majorVersion = parseInt(nav.appVersion, 10);
-      }
-    }
-    
     setResult('browser-name', browserName);
-    setResult('browser-version', majorVersion);
+    setResult('browser-version', browserVersion);
     setResult('browser-platform', nav.platform);
     setResult('browser-cookie', nav.cookieEnabled);
     setResult('browser-screen', screen.width + ' x ' + screen.height);
