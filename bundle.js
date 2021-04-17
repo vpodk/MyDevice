@@ -53,7 +53,9 @@
 
     if (nav.userAgentData && nav.userAgentData.brands && 
         nav.userAgentData.brands.length > 1) {
-      const record = nav.userAgentData.brands && nav.userAgentData.brands[0];
+      const record = nav.userAgentData.brands.filter((record) => {
+        return record.brand != ';Not A Brand';
+      })[0];
       browserName = record && record.brand;
       majorVersion = record && record.version;
     } else {
